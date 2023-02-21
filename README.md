@@ -19,3 +19,8 @@ https://monosnap.com/file/SfxdIHWFsorXAuLLMQO7voWtZRX5RI
 node index.js --action="remove" --id=3
 
 https://monosnap.com/file/ZFlmDhh8COHWnNh7T5vywdf2Imf9iE
+
+# Оновлюємо контакт
+ node index.js --action="update" --id=7  --name="Flesh" --email="flesh@gmail.com" --phone="111-11-11"
+ 
+ https://monosnap.com/file/TJXF5BbOI0xvx5W4KKrnAB8sHAHPsS
