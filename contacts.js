@@ -1,5 +1,3 @@
-// import { promises as fs } from "fs";
-// import path from "path";
 const fs = require("fs").promises;
 const path = require("path");
 const { v4 } = require("uuid");
@@ -28,16 +26,26 @@ const getContactById = async (contactId) => {
   }
 };
 
+const updateContactById = async (contactId, name, email, phone) => {
+  try {
+    const userList = await listContacts();
+    const indx = userList.findIndex((item) => item.id === contactId);
+    if (indx === -1) {
+      return null;
+    }
+    userList[indx] = { id: contactId, name, email, phone };
+    await updateUser(userList);
+    return userList;
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
 const removeContact = async (contactId) => {
   try {
     const userList = await listContacts();
     const newUserList = userList.filter((item) => item.id !== contactId);
-    // const usInd = userList.findIndex((item) => item.id === contactId);
-    // if (!usInd) {
-    //   return null;
-    // }
-    // const removeUser = userList.splice(usInd, 1);
-    await updaiteUser(newUserList);
+    await updateUser(newUserList);
     return newUserList;
   } catch (err) {
     console.log(err.message);
@@ -49,35 +57,21 @@ const addContact = async (name, email, phone) => {
     const userList = await listContacts();
     const newUser = { id: v4(), name, email, phone };
     userList.push(newUser);
-    await updaiteUser(userList);
+    await updateUser(userList);
     return newUser;
   } catch (err) {
     console.log(err.message);
   }
 };
 
-const updaiteUser = async (userList) => {
+const updateUser = async (userList) => {
   await fs.writeFile(contactsPath, JSON.stringify(userList));
 };
 
 module.exports = {
   listContacts,
   getContactById,
+  updateContactById,
   removeContact,
   addContact,
 };
-
-// const fileOperation = async (filePath, action = "read", data = {}) => {
-//   switch (action) {
-//     case "read":
-//       const userList = await fs.readFile(filePath, "utf-8");
-//       console.table(userList);
-//       break;
-//     case "add":
-//       await fs.appendFile(filePath, data);
-//       break;
-//     case "replace":
-//       await fs.writeFile(filePath, data);
-//       break;
-//   }
-// };
